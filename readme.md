@@ -48,7 +48,7 @@ Você vai precisar de:
 
 Passo a passo:
 
-1. No n8n, importe o arquivo `workflow/Agente Whatsapp.json` (menu do workflow, depois **Import from file**).
+1. No n8n, importe o arquivo `workflow/Agente WhatsApp.json` (menu do workflow, depois **Import from file**).
 2. Crie as duas credenciais da tabela abaixo e selecione cada uma nos nós correspondentes.
 3. No WAHA, configure o webhook da sua sessão para apontar para a URL de produção do nó **Webhook** do n8n, com o evento de novas mensagens habilitado.
 4. Ative o workflow e mande uma mensagem para o número conectado.
