@@ -1,0 +1,423 @@
+{
+  "name": "Assistente WhatsApp",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "webhook",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "8ae326f8-47a2-422a-8f4c-33242aa8c131",
+      "name": "Webhook",
+      "webhookId": "b7fc31d7-aa31-455f-af8d-40cc8464697a"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "96ab4f81-d8b8-4be3-859c-4cf9ede19b91",
+              "name": "event",
+              "value": "={{ $json.body.event }}",
+              "type": "string"
+            },
+            {
+              "id": "3a3fc38e-5a6a-49c5-9cdc-2ed9eae6f38f",
+              "name": "session",
+              "value": "={{ $json.body.session }}",
+              "type": "string"
+            },
+            {
+              "id": "8f94d3ae-0d0b-4958-b022-b05a837d5fe7",
+              "name": "message_id",
+              "value": "={{ $json.body.payload.id }}",
+              "type": "string"
+            },
+            {
+              "id": "816a2b82-c15f-427a-93f7-6600f297b338",
+              "name": "from",
+              "value": "={{ $json.body.payload._data.from }}",
+              "type": "string"
+            },
+            {
+              "id": "cda00f7d-abf6-480e-90ae-2b28cf55c8ca",
+              "name": "to",
+              "value": "={{ $json.body.payload._data.to }}",
+              "type": "string"
+            },
+            {
+              "id": "5cdb4c1d-68fa-4e14-8902-b5547bfe4103",
+              "name": "notfyName",
+              "value": "={{ $json.body.payload._data.notifyName }}",
+              "type": "string"
+            },
+            {
+              "id": "05e5db4a-29ce-4e16-884f-1d63c2c2473b",
+              "name": "fromMe",
+              "value": "={{ $json.body.payload.fromMe }}",
+              "type": "boolean"
+            },
+            {
+              "id": "fb2c86bb-60ec-4436-b4fd-7f026e0399ba",
+              "name": "source",
+              "value": "={{ $json.body.payload.source }}",
+              "type": "string"
+            },
+            {
+              "id": "a1022bbb-54ee-47ba-9cf2-fd0441e2b8a0",
+              "name": "body",
+              "value": "={{ $json.body.payload.body }}",
+              "type": "string"
+            },
+            {
+              "id": "4d0f84bb-e49f-4185-a9cb-f39f5bcc6821",
+              "name": "hasMedia",
+              "value": "={{ $json.body.payload.hasMedia }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "1e29322a-f49d-4688-83bb-de13ab46f943",
+      "name": "Dados"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3bb67153-27ee-4756-bcad-ef9fbb53fa5f",
+              "leftValue": "={{ $json.source }}",
+              "rightValue": "api",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        416,
+        0
+      ],
+      "id": "2aa38d28-5f1a-4a7c-8c24-366b1bb1d36a",
+      "name": "API?"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "3385e3a5-90b9-41cb-a0c6-0946dc2170a2",
+              "leftValue": "={{ $json.to }}",
+              "rightValue": "@g.us",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        624,
+        96
+      ],
+      "id": "7f51a1c9-f879-4b96-bf9e-a31c9b641e5c",
+      "name": "Grupo?"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.body }}",
+        "options": {
+          "systemMessage": "Você é um assistente pessoal, que atende via WhatsApp. Seu nome é Jarvis\n\nSua função é atuar como um assistente geral, você tira dúvidas, atende solicitações, executa tarefas e faz o que for solicitado.\n\nComportamento:\n-Comunique-se de forma natural e humanizada, adaptando-se a maneira de cada usuário.\n-Seja honesto, não iluda o usuário\n-Não deduza nada, se você tiver dúvidas sobre algo, pesquise e/ou pergunte antes de prosseguir."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        832,
+        192
+      ],
+      "id": "be9e2592-bab0-45e5-93d6-498d957b3e91",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "modelName": "models/gemini-3.5-flash",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        704,
+        400
+      ],
+      "id": "af6529bb-7b56-423c-846d-bb83349fd974",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "w6hUgKnBVT2rblFJ",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $('Dados').item.json.session }} {{ $('Dados').item.json.from }} chats"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.3,
+      "position": [
+        848,
+        400
+      ],
+      "id": "3c562d1b-07f8-4312-817c-663f172e7d3c",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Start Typing",
+        "session": "={{ $('Dados').item.json.session }}",
+        "chatId": "={{ $('Dados').item.json.from }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-waha.WAHA",
+      "typeVersion": 202411,
+      "position": [
+        1184,
+        192
+      ],
+      "id": "12aa253f-1663-451c-8b54-76b62623222e",
+      "name": "Start Typing",
+      "credentials": {
+        "wahaApi": {
+          "id": "1cHBw4zRDh5hzlc9",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "amount": 2
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1392,
+        192
+      ],
+      "id": "07c85007-a4a2-4196-8cbf-7a1a1e10283d",
+      "name": "Wait",
+      "webhookId": "ad369f4a-4665-4f75-a168-ccec2787ea1c"
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Seen",
+        "session": "={{ $('Dados').item.json.session }}",
+        "chatId": "={{ $('Dados').item.json.from }}",
+        "messageId": "={{ $('Dados').item.json.message_id }}",
+        "participant": "",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-waha.WAHA",
+      "typeVersion": 202411,
+      "position": [
+        1184,
+        384
+      ],
+      "id": "b346276b-098f-4f08-8a76-a152f98295cb",
+      "name": "Send Seen",
+      "credentials": {
+        "wahaApi": {
+          "id": "1cHBw4zRDh5hzlc9",
+          "name": "WAHA account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "Chatting",
+        "operation": "Send Text",
+        "session": "={{ $('Dados').item.json.session }}",
+        "chatId": "={{ $('Dados').item.json.from }}",
+        "text": "={{ $('AI Agent').item.json.output }}",
+        "requestOptions": {}
+      },
+      "type": "n8n-nodes-waha.WAHA",
+      "typeVersion": 202411,
+      "position": [
+        1600,
+        192
+      ],
+      "id": "c2082841-e6b9-45a1-ada8-fec4822410ba",
+      "name": "Send a text message",
+      "credentials": {
+        "wahaApi": {
+          "id": "1cHBw4zRDh5hzlc9",
+          "name": "WAHA account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Dados",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Dados": {
+      "main": [
+        [
+          {
+            "node": "API?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "API?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "Grupo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Grupo?": {
+      "main": [
+        [],
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Start Typing",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Send Seen",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Start Typing": {
+      "main": [
+        [
+          {
+            "node": "Wait",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "fdca5f44-922d-4329-add0-987d18ed4527",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "f90c8cf0bf523a5f91b1488a91db3e5f1a6661239382f99d515881b33e10dc43"
+  },
+  "id": "jWT9vXNLqSOsijxg",
+  "tags": []
+}
